@@ -1,0 +1,15 @@
+PODS:
+  - NVActivityIndicatorView (3.6.1)
+  - SnapKit (3.0.2)
+
+DEPENDENCIES:
+  - NVActivityIndicatorView
+  - SnapKit (~> 3.0.2)
+
+SPEC CHECKSUMS:
+  NVActivityIndicatorView: 9f52a7f84bf5c6a798722c450fe3c198e01c56ed
+  SnapKit: 2e456761aa92d4d4067a7a5594c18769d451a8ad
+
+PODFILE CHECKSUM: 0f000caec632f2bc945c703a788223c8cc04069f
+
+COCOAPODS: 1.2.0
