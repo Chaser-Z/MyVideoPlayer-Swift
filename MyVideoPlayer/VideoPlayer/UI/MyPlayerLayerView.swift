@@ -16,7 +16,7 @@ protocol MyPlayerLayerViewDelegate {
     func layerView(playCurrentTime: Float, totalTime: Float)
     func layerView(bufferStatusChange bufferStatus: MyPlayerBufferStatus)
     func layerView(playStatusChange playStatus: MyPlayerStatus)
-    
+    func layerView(isBecomeActiveNotification isB: Bool)
 }
 
 
@@ -35,7 +35,9 @@ class MyPlayerLayerView: UIView {
     var playStatus: MyPlayerStatus! = MyPlayerStatus.none
     fileprivate var bufferStatus = MyPlayerBufferStatus.none {
         didSet {
-            delegate.layerView(bufferStatusChange: bufferStatus)
+            if bufferStatus != oldValue {
+                delegate.layerView(bufferStatusChange: bufferStatus)
+            }
         }
     }
     var delegate: MyPlayerLayerViewDelegate!
@@ -81,6 +83,7 @@ class MyPlayerLayerView: UIView {
     }
     // MARK: - 计时器事件
     @objc fileprivate func playerTimerAction() {
+        //self.playStatus = .playing
         let currentTime = CMTimeGetSeconds(self.player!.currentTime())
         self.currentTime = Float(currentTime)
         let totalTime = Float(self.currentItem.duration.value) / Float(self.currentItem.duration.timescale)
@@ -91,6 +94,23 @@ class MyPlayerLayerView: UIView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    // MARK: seek
+    func seek(to secounds: TimeInterval, completion:(()->Void)?) {
+        if secounds.isNaN {
+            return
+        }
+        configureTimer()
+        //if self.player?.currentItem?.status == AVPlayerItemStatus.readyToPlay {
+            let draggedTime = CMTimeMake(Int64(secounds), 1)
+            self.player!.seek(to: draggedTime, toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero, completionHandler: { (finished) in
+                completion?()
+            })
+//        } else {
+//            //self.shouldSeekTo = secounds
+//            print("测试")
+//        }
+    }
+
     // MARK: - 开始播放
     func startPlay() {
        
@@ -100,9 +120,10 @@ class MyPlayerLayerView: UIView {
         self.currentItem = item
         self.player.replaceCurrentItem(with: self.currentItem)
         self.player.play()
-        self.playStatus = .playing
         self.configureTimer()
         self.addNotic()
+        self.playStatus = .playing
+
     }
     // MARK: - 暂停播放
     func pausePlay() {
@@ -112,28 +133,28 @@ class MyPlayerLayerView: UIView {
     }
     // MARK: - 继续播放
     func goonPlay() {
-        
         self.player.play()
         self.playStatus = .playing
         self.playTime.fireDate = Date()
-        
     }
     // MARK: - 播放完毕
     @objc fileprivate func playEnd(_ sender: AnyObject) {
-        
         print("播放结束")
         self.playTime.invalidate()
         self.playStatus = .end
-        self.player.pause()
+        //self.player.pause()
         self.delegate.layerView(playStatusChange: self.playStatus)
     }
     //MARK: - 进入前后台通知
     @objc fileprivate func resignActiveNotification(_ notic:AnyObject) {
         print("进入后台")
-        
+        self.delegate.layerView(isBecomeActiveNotification: false)
     }
     @objc fileprivate func becomeActiveNotification(_ notic: AnyObject) {
         print("返回前台")
+        print(self.playStatus)
+        self.delegate.layerView(isBecomeActiveNotification: true)
+
     }
     // MARK: - KVO(监控视频各种状态)
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {

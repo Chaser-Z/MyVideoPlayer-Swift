@@ -14,6 +14,8 @@ import MediaPlayer
 class MyPlayer: UIView, MyPlayCoverViewDelegate, MyPlayerLayerViewDelegate {
 
     fileprivate var playerView: MyPlayerLayerView!
+    fileprivate var isHaveSelected = false
+    fileprivate var currentURL: String!
 
     /**  包含在哪一个控制器中 */
     var contrainerViewController: UIViewController!
@@ -24,8 +26,6 @@ class MyPlayer: UIView, MyPlayCoverViewDelegate, MyPlayerLayerViewDelegate {
     fileprivate var seekStatus: MyPlayerSeekStatus!
     fileprivate var controlType: ControlType!
     fileprivate var playStatus: MyPlayerStatus!
-    
-    fileprivate var pointX: CGFloat! = 0
     
     init(frame: CGRect, urlString: String, title: String) {
     //init(frame: CGRect, urls: Array<String>, title: String) {
@@ -42,6 +42,7 @@ class MyPlayer: UIView, MyPlayCoverViewDelegate, MyPlayerLayerViewDelegate {
     //fileprivate func play(urls: Array<String>) {
         self.playerView = MyPlayerLayerView(frame: CGRect.zero, urlString: urlString)
         //self.playerView = MyPlayerLayerView(frame: CGRect.zero, urls: urls)
+        self.currentURL = urlString
         self.playerView.startPlay()
         self.playerView.delegate = self
         self.addSubview(self.playerView)
@@ -84,13 +85,23 @@ class MyPlayer: UIView, MyPlayCoverViewDelegate, MyPlayerLayerViewDelegate {
     // 播放和暂停按钮
     fileprivate func stopAndPlayButtonClick() {
 
-        if self.playerView.playStatus == MyPlayerStatus.playing || self.playerView.playStatus == MyPlayerStatus.readyToPlay{
+        print(self.playerView.playStatus)
+        if (self.playerView.playStatus == MyPlayerStatus.playing || self.playerView.playStatus == MyPlayerStatus.readyToPlay) && self.isHaveSelected == false{
             
             self.playerView.pausePlay()
         } else {
             self.playerView.goonPlay()
         }
         
+        
+    }
+    // 返回按钮
+    fileprivate func backButtonClick() {
+        if isFullScreen == true {
+            self.fullScreenButtonClick()
+        } else {
+            self.contrainerViewController.navigationController?.popViewController(animated: true)
+        }
         
     }
     // MARK: - MyPlayerLayerViewDelegate
@@ -102,14 +113,12 @@ class MyPlayer: UIView, MyPlayCoverViewDelegate, MyPlayerLayerViewDelegate {
         
         if self.seekStatus != MyPlayerSeekStatus.seeking {
             self.coverView.slider.startValue = playCurrentTime / totalTime
-            self.coverView.currentTimeLabel.text = timeFormatted(Int(playCurrentTime))
+            self.coverView.currentTimeLabel.text = playCurrentTime.isNaN ? "00:00" : timeFormatted(Int(playCurrentTime))
             self.coverView.totalTimeLabel.text = totalTime.isNaN ?  "00:00" : timeFormatted(Int(totalTime))
         }
        
     }
     func layerView(bufferStatusChange bufferStatus: MyPlayerBufferStatus) {
-        
-        //print("bufferStatus = \(bufferStatus)")
         if bufferStatus == .buffering {
             self.coverView.showLoader()
             //self.playerView.pausePlay()
@@ -123,8 +132,27 @@ class MyPlayer: UIView, MyPlayCoverViewDelegate, MyPlayerLayerViewDelegate {
         self.playStatus = playStatus
         if self.playStatus == MyPlayerStatus.end {
             self.coverView.startAndStopButton.isSelected = true
+            self.coverView.replayButton.isHidden = false
         } else if self.playStatus == MyPlayerStatus.playing {
             self.coverView.startAndStopButton.isSelected = false
+            self.coverView.replayButton.isHidden = true
+        }
+    }
+    func layerView(isBecomeActiveNotification isB: Bool) {
+        if isB == true {
+            if isHaveSelected == true{
+                
+            } else {
+                self.playerView.goonPlay()
+                self.coverView.startAndStopButton.isSelected = false
+                self.isHaveSelected = false
+            }
+        } else {
+            if self.coverView.startAndStopButton.isSelected == true {
+                isHaveSelected = true
+            }
+            self.coverView.startAndStopButton.isSelected = true
+            self.playerView.pausePlay()
         }
     }
     //MARK: - 转换时间（00:00）
@@ -144,7 +172,10 @@ class MyPlayer: UIView, MyPlayCoverViewDelegate, MyPlayerLayerViewDelegate {
         case 101:
             self.stopAndPlayButtonClick()
         case 102:
-            print("back")
+            self.backButtonClick()
+        case 103:
+            self.seek(0)
+            self.playerView.changeToPlay(palyUrl: self.currentURL)
         default:
             print("1")
         }
@@ -168,6 +199,9 @@ class MyPlayer: UIView, MyPlayCoverViewDelegate, MyPlayerLayerViewDelegate {
         if self.controlType == ControlType.progressControl && touchBeginPoint != nil && self.playerView.duration != nil{
             
             let value = self.moveProgressControllWithTempPoint(tempPoint!, touchBeginPoint: touchBeginPoint!)
+            if value.isNaN {
+                return
+            }
             if seekStatus == .seeking {
                 self.coverView.currentTimeLabel.text = self.timeFormatted(Int(value))
                 self.coverView.slider.startValue = Float(value) / Float(self.playerView.duration)
@@ -202,9 +236,15 @@ class MyPlayer: UIView, MyPlayCoverViewDelegate, MyPlayerLayerViewDelegate {
         }
         return tempVaule
     }
+    // MARK: - seek
+    func seek(_ to:TimeInterval, completion: (()->Void)? = nil) {
+        self.playerView.seek(to: to, completion: completion)
+    }
+
     // MARK: - 切换播放
     func changePlay(palyUrl url: String, title: String) {
         self.playerView.changeToPlay(palyUrl: url)
+        self.currentURL = url
     }
     // MARK: - 销毁播放器
     func prepareToDealloc() {

@@ -70,6 +70,10 @@ class MyPlayerCoverView: UIView,MySliderDelegate {
     
     // 等待提醒试图
     fileprivate var loadingIndector  = NVActivityIndicatorView(frame:  CGRect(x: 0, y: 0, width: 30, height: 30))
+    
+    // 重复播放按钮
+    var replayButton: UIButton!
+
 
     // enum
     fileprivate var controlType: ControlType!
@@ -182,7 +186,7 @@ class MyPlayerCoverView: UIView,MySliderDelegate {
         self.shareButton = UIButton()
         self.shareButton.setImage(UIImage(named: "btn_vdo_full"), for: .normal)
         self.shareButton.addTarget(self, action: #selector(MyPlayerCoverView.fullScreenButtonClick), for: .touchUpInside)
-        self.shareButton.tag = 103
+        self.shareButton.tag = 104
         self.topView.addSubview(self.shareButton)
 
         
@@ -202,6 +206,15 @@ class MyPlayerCoverView: UIView,MySliderDelegate {
         self.startAndStopButton.tag = 101
         self.bottomView.addSubview(self.startAndStopButton)
         
+        // 重复播放按钮
+        self.replayButton = UIButton()
+        self.replayButton.backgroundColor = UIColor.clear
+        self.replayButton.setImage(UIImage(named: "btn_task_refresh"), for: .normal)
+        self.replayButton.addTarget(self, action: #selector(MyPlayerCoverView.fullScreenButtonClick), for: .touchUpInside)
+        self.replayButton.tag = 103
+        self.replayButton.isHidden = true
+        self.addSubview(self.replayButton)
+
     }
     // MARK: - label
     fileprivate func createLabel() {
@@ -379,6 +392,12 @@ class MyPlayerCoverView: UIView,MySliderDelegate {
             make.centerX.equalTo(self.snp.centerX).offset(0)
             make.centerY.equalTo(self.snp.centerY).offset(0)
         }
+        
+        self.replayButton.snp.makeConstraints { (make) in
+            make.center.equalTo(self)
+            make.height.equalTo(40)
+            make.width.equalTo(40)
+        }
 
     }
     // MARK: - MySliderDelegate
@@ -478,6 +497,5 @@ class MyPlayerCoverView: UIView,MySliderDelegate {
         self.timeView.isHidden = true
 
     }
-    
 
 }
