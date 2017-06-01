@@ -36,7 +36,6 @@ class PlayViewController: UIViewController {
         self.navigationController?.navigationBar.isHidden = true
         self.view.backgroundColor = UIColor.white
         self.player = MyPlayer(frame: CGRect.zero, urlString: "http://baobab.wdjcdn.com/1455782903700jy.mp4", title: "测试")
-        //self.player = MyPlayer(frame: CGRect.zero, urls: urls, title: "测试")
         self.player.contrainerViewController = self
         self.view.addSubview(self.player)
         
