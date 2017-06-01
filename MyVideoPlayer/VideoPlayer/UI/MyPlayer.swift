@@ -16,6 +16,9 @@ class MyPlayer: UIView, MyPlayCoverViewDelegate, MyPlayerLayerViewDelegate {
     fileprivate var playerView: MyPlayerLayerView!
     fileprivate var isHaveSelected = false
     fileprivate var currentURL: String!
+    
+    var subtitle = GetPlayResource()
+
 
     /**  包含在哪一个控制器中 */
     var contrainerViewController: UIViewController!
@@ -116,7 +119,11 @@ class MyPlayer: UIView, MyPlayCoverViewDelegate, MyPlayerLayerViewDelegate {
             self.coverView.currentTimeLabel.text = playCurrentTime.isNaN ? "00:00" : timeFormatted(Int(playCurrentTime))
             self.coverView.totalTimeLabel.text = totalTime.isNaN ?  "00:00" : timeFormatted(Int(totalTime))
         }
-       
+        if !totalTime.isNaN {
+            
+            self.coverView.showSubtile(from: subtitle!, at: TimeInterval(playCurrentTime))
+
+        }
     }
     func layerView(bufferStatusChange bufferStatus: MyPlayerBufferStatus) {
         if bufferStatus == .buffering {

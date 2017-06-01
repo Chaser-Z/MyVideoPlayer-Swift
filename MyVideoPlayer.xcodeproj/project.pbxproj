@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		680BB0CF1EB08C59005CAE7D /* MyPlayerCoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 680BB0CE1EB08C59005CAE7D /* MyPlayerCoverView.swift */; };
 		682830171EB1F26E006EF872 /* MyPlayerSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682830161EB1F26E006EF872 /* MyPlayerSheetView.swift */; };
+		68610D8A1EDFF48C000632C2 /* MySubtitles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68610D891EDFF48C000632C2 /* MySubtitles.swift */; };
+		68610D8C1EDFF6B9000632C2 /* MyPlayerResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68610D8B1EDFF6B9000632C2 /* MyPlayerResource.swift */; };
+		68610D8E1EDFF940000632C2 /* SubtitleDemo.srt in Resources */ = {isa = PBXBuildFile; fileRef = 68610D8D1EDFF940000632C2 /* SubtitleDemo.srt */; };
 		6895B7371EB18F37001A0DBA /* MyPlayerLightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6895B7361EB18F36001A0DBA /* MyPlayerLightView.swift */; };
 		68B046891EAEFAE40074B369 /* MySlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B046881EAEFAE40074B369 /* MySlider.swift */; };
 		68B0468B1EAF2E270074B369 /* MyPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B0468A1EAF2E270074B369 /* MyPlayer.swift */; };
@@ -26,6 +29,9 @@
 /* Begin PBXFileReference section */
 		680BB0CE1EB08C59005CAE7D /* MyPlayerCoverView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyPlayerCoverView.swift; sourceTree = "<group>"; };
 		682830161EB1F26E006EF872 /* MyPlayerSheetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyPlayerSheetView.swift; sourceTree = "<group>"; };
+		68610D891EDFF48C000632C2 /* MySubtitles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MySubtitles.swift; sourceTree = "<group>"; };
+		68610D8B1EDFF6B9000632C2 /* MyPlayerResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyPlayerResource.swift; sourceTree = "<group>"; };
+		68610D8D1EDFF940000632C2 /* SubtitleDemo.srt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SubtitleDemo.srt; sourceTree = "<group>"; };
 		6895B7361EB18F36001A0DBA /* MyPlayerLightView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyPlayerLightView.swift; sourceTree = "<group>"; };
 		68B046881EAEFAE40074B369 /* MySlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MySlider.swift; sourceTree = "<group>"; };
 		68B0468A1EAF2E270074B369 /* MyPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyPlayer.swift; sourceTree = "<group>"; };
@@ -99,6 +105,8 @@
 				68B0468E1EAF2F920074B369 /* MyPlayerStatus.swift */,
 				6895B7361EB18F36001A0DBA /* MyPlayerLightView.swift */,
 				682830161EB1F26E006EF872 /* MyPlayerSheetView.swift */,
+				68610D891EDFF48C000632C2 /* MySubtitles.swift */,
+				68610D8B1EDFF6B9000632C2 /* MyPlayerResource.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -128,6 +136,7 @@
 				68DCF42A1EAEF8FB0076FA5A /* AppDelegate.swift */,
 				68DCF42C1EAEF8FB0076FA5A /* ViewController.swift */,
 				68E870D81EB31A82003743B8 /* PlayViewController.swift */,
+				68610D8D1EDFF940000632C2 /* SubtitleDemo.srt */,
 				68DCF42E1EAEF8FB0076FA5A /* Main.storyboard */,
 				68DCF4311EAEF8FB0076FA5A /* Assets.xcassets */,
 				68DCF4331EAEF8FB0076FA5A /* LaunchScreen.storyboard */,
@@ -207,6 +216,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68610D8E1EDFF940000632C2 /* SubtitleDemo.srt in Resources */,
 				68DCF4351EAEF8FB0076FA5A /* LaunchScreen.storyboard in Resources */,
 				68DCF4321EAEF8FB0076FA5A /* Assets.xcassets in Resources */,
 				68DCF4301EAEF8FB0076FA5A /* Main.storyboard in Resources */,
@@ -272,10 +282,12 @@
 				68B0468D1EAF2E9D0074B369 /* MyPlayerLayerView.swift in Sources */,
 				68B0468B1EAF2E270074B369 /* MyPlayer.swift in Sources */,
 				68B046891EAEFAE40074B369 /* MySlider.swift in Sources */,
+				68610D8C1EDFF6B9000632C2 /* MyPlayerResource.swift in Sources */,
 				682830171EB1F26E006EF872 /* MyPlayerSheetView.swift in Sources */,
 				680BB0CF1EB08C59005CAE7D /* MyPlayerCoverView.swift in Sources */,
 				68E870D91EB31A82003743B8 /* PlayViewController.swift in Sources */,
 				68DCF42D1EAEF8FB0076FA5A /* ViewController.swift in Sources */,
+				68610D8A1EDFF48C000632C2 /* MySubtitles.swift in Sources */,
 				68B0468F1EAF2F920074B369 /* MyPlayerStatus.swift in Sources */,
 				68DCF42B1EAEF8FB0076FA5A /* AppDelegate.swift in Sources */,
 			);

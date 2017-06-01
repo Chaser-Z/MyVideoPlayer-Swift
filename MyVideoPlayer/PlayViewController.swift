@@ -47,8 +47,10 @@ class PlayViewController: UIViewController {
             make.height.equalTo(view.snp.width).multipliedBy(9.0/16.0)
         }
         
-        
-        
+        let qe: DispatchQoS = DispatchQoS(qosClass: .default, relativePriority: 0)
+        DispatchQueue.global(qos: qe.qosClass).async {
+            
+        }
         
         
         changeButton.setTitle("Change Video", for: .normal)

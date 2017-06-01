@@ -62,6 +62,11 @@ class MyPlayerCoverView: UIView,MySliderDelegate {
     fileprivate var touchBeginLightValue: CGFloat!
     fileprivate var effectView: UIVisualEffectView!
     
+    // 字幕View
+    fileprivate var subtitleBackView: UIView!
+    fileprivate var subtitleLabel: UILabel!
+    fileprivate var subtileAttrabute: [String : Any]?
+    
     /**  触摸开始触碰到的点 */
     fileprivate var touchBeginPoint: CGPoint!
 
@@ -78,6 +83,7 @@ class MyPlayerCoverView: UIView,MySliderDelegate {
     // enum
     fileprivate var controlType: ControlType!
     fileprivate var seekStatus: MyPlayerSeekStatus!
+    // deleaget
     var delegate: MyPlayCoverViewDelegate!
 
 
@@ -100,6 +106,7 @@ class MyPlayerCoverView: UIView,MySliderDelegate {
         self.createTimeView()
         self.createTopView()
         self.createBottomView()
+        self.createSubtitleBackView()
         self.createMySlider()
         self.createButton()
         self.createLabel()
@@ -148,23 +155,45 @@ class MyPlayerCoverView: UIView,MySliderDelegate {
         }
         
     }
+    
     fileprivate func createTimeView(){
         self.timeView = MyPlayerSheetView()
         self.timeView.layer.cornerRadius = 10.0
         self.timeView.isHidden = true
         self.addSubview(self.timeView)
     }
+    
     fileprivate func createTopView() {
         
         self.topView = UIView()
         //self.topView.backgroundColor = UIColor.brown
         self.addSubview(self.topView)
     }
+    
     fileprivate func createBottomView() {
         self.bottomView = UIView()
         //self.bottomView.backgroundColor = UIColor.red
         self.addSubview(self.bottomView)
     }
+    
+    fileprivate func createSubtitleBackView() {
+        
+        self.subtitleLabel = UILabel()
+        self.subtitleLabel.numberOfLines = 0
+        self.subtitleLabel.textAlignment = .center
+        self.subtitleLabel.textColor = UIColor.white
+        self.subtitleLabel.adjustsFontSizeToFitWidth = true
+        self.subtitleLabel.minimumScaleFactor = 0.5
+        self.subtitleLabel.font = UIFont.systemFont(ofSize: 13)
+
+        self.subtitleBackView = UIView()
+        self.subtitleBackView.layer.cornerRadius = 2
+        self.subtitleBackView.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        self.subtitleBackView.addSubview(self.subtitleLabel)
+        self.addSubview(self.subtitleBackView)
+        
+    }
+    
     // MARK: - slider
     fileprivate func createMySlider() {
         
@@ -285,6 +314,17 @@ class MyPlayerCoverView: UIView,MySliderDelegate {
             self.addSubview(self.lightView)
         }
     }
+    
+    // MARK: - 显示字幕
+    func showSubtile(from subtitle: MySubtitles, at time: TimeInterval) {
+        if let group = subtitle.search(for: time) {
+            subtitleBackView.isHidden = false
+            subtitleLabel.attributedText = NSAttributedString(string: group.text,
+                                                              attributes: subtileAttrabute)
+        } else {
+            //subtitleBackView.isHidden = true
+        }
+    }
 
     // MARK: - Snap
     fileprivate func addSnapKitConstraint() {
@@ -387,6 +427,21 @@ class MyPlayerCoverView: UIView,MySliderDelegate {
             
         }
 
+        subtitleBackView.snp.makeConstraints {
+            $0.bottom.equalTo(snp.bottom).offset(-5)
+            $0.centerX.equalTo(snp.centerX)
+            $0.width.lessThanOrEqualTo(snp.width).offset(-10).priority(750)
+        }
+        
+        subtitleLabel.snp.makeConstraints {
+            $0.left.equalTo(subtitleBackView.snp.left).offset(10)
+            $0.right.equalTo(subtitleBackView.snp.right).offset(-10)
+            $0.top.equalTo(subtitleBackView.snp.top).offset(2)
+            $0.bottom.equalTo(subtitleBackView.snp.bottom).offset(-2)
+        }
+
+        
+        
         self.addSubview(self.loadingIndector)
         loadingIndector.snp.makeConstraints { (make) in
             make.centerX.equalTo(self.snp.centerX).offset(0)
